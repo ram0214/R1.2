@@ -15,6 +15,8 @@ const cutCall = document.querySelector('.cutcall');
 const screenShareButt = document.querySelector('.screenshare');
 const whiteboardButt = document.querySelector('.board-icon')
 
+
+
 //whiteboard js start
 const whiteboardCont = document.querySelector('.whiteboard-cont');
 const canvas = document.querySelector("#whiteboard");
@@ -402,56 +404,56 @@ function handleVideoAnswer(answer, sid) {
     connections[sid].setRemoteDescription(ans);
 }
 
-// //Thanks to (https://github.com/miroslavpejic85) for ScreenShare Code
+//Thanks to (https://github.com/miroslavpejic85) for ScreenShare Code
 
-// screenShareButt.addEventListener('click', () => {
-//     screenShareToggle();
-// });
-// let screenshareEnabled = false;
-// function screenShareToggle() {
-//     let screenMediaPromise;
-//     if (!screenshareEnabled) {
-//         if (navigator.getDisplayMedia) {
-//             screenMediaPromise = navigator.getDisplayMedia({ video: true });
-//         } else if (navigator.mediaDevices.getDisplayMedia) {
-//             screenMediaPromise = navigator.mediaDevices.getDisplayMedia({ video: true });
-//         } else {
-//             screenMediaPromise = navigator.mediaDevices.getUserMedia({
-//                 video: { mediaSource: "screen" },
-//             });
-//         }
-//     } else {
-//         screenMediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
-//     }
-//     screenMediaPromise
-//         .then((myscreenshare) => {
-//             screenshareEnabled = !screenshareEnabled;
-//             for (let key in connections) {
-//                 const sender = connections[key]
-//                     .getSenders()
-//                     .find((s) => (s.track ? s.track.kind === "video" : false));
-//                 sender.replaceTrack(myscreenshare.getVideoTracks()[0]);
-//             }
-//             myscreenshare.getVideoTracks()[0].enabled = true;
-//             const newStream = new MediaStream([
-//                 myscreenshare.getVideoTracks()[0], 
-//             ]);
-//             myvideo.srcObject = newStream;
-//             myvideo.muted = true;
-//             mystream = newStream;
-//             screenShareButt.innerHTML = (screenshareEnabled 
-//                 ? `<i class="fas fa-desktop"></i><span class="tooltiptext">Stop Share Screen</span>`
-//                 : `<i class="fas fa-desktop"></i><span class="tooltiptext">Share Screen</span>`
-//             );
-//             myscreenshare.getVideoTracks()[0].onended = function() {
-//                 if (screenshareEnabled) screenShareToggle();
-//             };
-//         })
-//         .catch((e) => {
-//             alert("Unable to share screen:" + e.message);
-//             console.error(e);
-//         });
-// }
+screenShareButt.addEventListener('click', () => {
+    screenShareToggle();
+});
+let screenshareEnabled = false;
+function screenShareToggle() {
+    let screenMediaPromise;
+    if (!screenshareEnabled) {
+        if (navigator.getDisplayMedia) {
+            screenMediaPromise = navigator.getDisplayMedia({ video: true });
+        } else if (navigator.mediaDevices.getDisplayMedia) {
+            screenMediaPromise = navigator.mediaDevices.getDisplayMedia({ video: true });
+        } else {
+            screenMediaPromise = navigator.mediaDevices.getUserMedia({
+                video: { mediaSource: "screen" },
+            });
+        }
+    } else {
+        screenMediaPromise = navigator.mediaDevices.getUserMedia({ video: true });
+    }
+    screenMediaPromise
+        .then((myscreenshare) => {
+            screenshareEnabled = !screenshareEnabled;
+            for (let key in connections) {
+                const sender = connections[key]
+                    .getSenders()
+                    .find((s) => (s.track ? s.track.kind === "video" : false));
+                sender.replaceTrack(myscreenshare.getVideoTracks()[0]);
+            }
+            myscreenshare.getVideoTracks()[0].enabled = true;
+            const newStream = new MediaStream([
+                myscreenshare.getVideoTracks()[0], 
+            ]);
+            myvideo.srcObject = newStream;
+            myvideo.muted = true;
+            mystream = newStream;
+            screenShareButt.innerHTML = (screenshareEnabled 
+                ? `<i class="fas fa-desktop"></i><span class="tooltiptext">Stop Share Screen</span>`
+                : `<i class="fas fa-desktop"></i><span class="tooltiptext">Share Screen</span>`
+            );
+            myscreenshare.getVideoTracks()[0].onended = function() {
+                if (screenshareEnabled) screenShareToggle();
+            };
+        })
+        .catch((e) => {
+            alert("Unable to share screen:" + e.message);
+            console.error(e);
+        });
+}
 
 socket.on('video-offer', handleVideoOffer);
 
@@ -709,16 +711,16 @@ socket.on('action', (msg, sid) => {
     }
 })
 
-// whiteboardButt.addEventListener('click', () => {
-//     if (boardVisisble) {
-//         whiteboardCont.style.visibility = 'hidden';
-//         boardVisisble = false;
-//     }
-//     else {
-//         whiteboardCont.style.visibility = 'visible';
-//         boardVisisble = true;
-//     }
-// })
+whiteboardButt.addEventListener('click', () => {
+    if (boardVisisble) {
+        whiteboardCont.style.visibility = 'hidden';
+        boardVisisble = false;
+    }
+    else {
+        whiteboardCont.style.visibility = 'visible';
+        boardVisisble = true;
+    }
+})
 
 cutCall.addEventListener('click', () => {
     location.href = '/';
